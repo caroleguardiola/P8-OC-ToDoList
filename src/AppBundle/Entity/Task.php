@@ -40,6 +40,11 @@ class Task
      */
     private $isDone;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"}, inversedBy="tasks")
+     */
+    private $user;
+
     public function __construct()
     {
         $this->createdAt = new \Datetime();
@@ -89,5 +94,48 @@ class Task
     public function toggle($flag)
     {
         $this->isDone = $flag;
+    }
+
+    /**
+     * Set isDone.
+     *
+     * @param bool $isDone
+     *
+     * @return Task
+     */
+    public function setIsDone($isDone)
+    {
+        $this->isDone = $isDone;
+
+        return $this;
+    }
+
+    /**
+     * Set user.
+     *
+     * @param User|null $user
+     *
+     * @return Task
+     */
+    public function setUser(User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+
+    /**
+     * @return AnonymousUser
+     */
+    public function getUser()
+    {
+        {
+            if (is_null($this->user)) {
+                return new AnonymousUser();
+            }else {
+                return  $this->user;
+            }
+        }
     }
 }
