@@ -41,7 +41,7 @@ class Task
     private $isDone;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"}, inversedBy="tasks")
      */
     private $user;
 
@@ -113,11 +113,11 @@ class Task
     /**
      * Set user.
      *
-     * @param string $user
+     * @param User|null $user
      *
      * @return Task
      */
-    public function setUser($user)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -127,7 +127,7 @@ class Task
     /**
      * Get user.
      *
-     * @return string
+     * @return User|null
      */
     public function getUser()
     {
