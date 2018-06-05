@@ -12,6 +12,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AnonymousUser implements UserInterface
 {
+    public function getId()
+    {
+    }
+
     public function getUsername()
     {
         return 'Anonymous';
@@ -19,17 +23,14 @@ class AnonymousUser implements UserInterface
 
     public function getSalt()
     {
-        return null;
     }
 
     public function getPassword()
     {
-        return 'Anonymous';
     }
 
     public function getEmail()
     {
-        return 'Anonymous';
     }
 
     public function getRoles()
@@ -39,5 +40,10 @@ class AnonymousUser implements UserInterface
 
     public function eraseCredentials()
     {
+    }
+
+    public function getTasks()
+    {
+        return $this->tasks;
     }
 }
