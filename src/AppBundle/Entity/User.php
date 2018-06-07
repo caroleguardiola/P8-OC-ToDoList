@@ -42,10 +42,10 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="json")
-     * @Assert\NotBlank(message="Vous devez choisir au moins un rôle.")
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Vous devez choisir un rôle.")
      */
-    private $roles = [];
+    private $role;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Task", mappedBy="user", cascade={"persist","remove"})
@@ -100,20 +100,27 @@ class User implements UserInterface
         $this->email = $email;
     }
 
-    /**
-     * @return array
-     */
-    public function getRoles()
-    {
-        return $this->roles;
-    }
 
     /**
-     * @param array $roles
+     * @return mixed
      */
-    public function setRoles(array $roles)
+    public function getRole()
     {
-        $this->roles = $roles;
+        return $this->role;
+    }
+
+    public function getRoles()
+    {
+        return array($this->role);
+    }
+
+
+    /**
+     * @param $role
+     */
+    public function setRole($role)
+    {
+        $this->roles = $role;
     }
 
     public function eraseCredentials()
@@ -156,4 +163,10 @@ class User implements UserInterface
     {
         return $this->tasks;
     }
+
+    public function canBeManagedBy($otherUser)
+    {
+        return $this->getId() === $otherUser->getId();
+    }
+
 }

@@ -8,42 +8,18 @@
 
 namespace AppBundle\Entity;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-
-class AnonymousUser implements UserInterface
+class AnonymousUser
 {
-    public function getId()
-    {
-    }
-
     public function getUsername()
     {
         return 'Anonymous';
     }
 
-    public function getSalt()
+    public function canBeManagedBy($otherUser)
     {
-    }
-
-    public function getPassword()
-    {
-    }
-
-    public function getEmail()
-    {
-    }
-
-    public function getRoles()
-    {
-        return array('ROLE_USER');
-    }
-
-    public function eraseCredentials()
-    {
-    }
-
-    public function getTasks()
-    {
-        return $this->tasks;
+        if(in_array('ROLE_ADMIN',$otherUser->getRoles())) {
+            return true;
+        }
+        return false;
     }
 }

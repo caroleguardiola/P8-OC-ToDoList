@@ -97,20 +97,6 @@ class Task
     }
 
     /**
-     * Set isDone.
-     *
-     * @param bool $isDone
-     *
-     * @return Task
-     */
-    public function setIsDone($isDone)
-    {
-        $this->isDone = $isDone;
-
-        return $this;
-    }
-
-    /**
      * Set user.
      *
      * @param User|null $user
@@ -124,18 +110,20 @@ class Task
         return $this;
     }
 
-
     /**
      * @return AnonymousUser
      */
     public function getUser()
     {
-        {
             if (is_null($this->user)) {
                 return new AnonymousUser();
             }else {
                 return  $this->user;
             }
         }
+
+    public function canBeDeletedBy($user)
+    {
+        return $this->getUser()->canBeManagedBy($user);
     }
 }

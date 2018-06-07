@@ -22,7 +22,7 @@
                             {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
                         </button>
                     </form>
-                    {% if task.user.username == app.user.username or ((task.user.username == 'Anonymous') and is_granted('ROLE_ADMIN')) %}
+                    {% if task.canBeDeletedBy(app.user) %}
                     <form action="{{ path('task_delete', {'id' : task.id }) }}">
                         <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
                     </form>
