@@ -87,7 +87,7 @@ class TaskController extends Controller
      */
     public function deleteTaskAction(Task $task)
     {
-        $user = $this->getUser()->getId();
+        $user = $this->getUser();
 
         if ($task->canBeDeletedBy($user)){
             $em = $this->getDoctrine()->getManager();
