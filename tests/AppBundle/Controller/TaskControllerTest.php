@@ -187,4 +187,18 @@ class TaskControllerTest extends WebTestCase
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('div.alert-success:contains("Superbe ! La tâche a bien été supprimée.")')->count());
     }
+
+    public function testDeleteAnonymousTaskwithAdminAction()
+    {
+        $this->logInAsAdmin();
+
+        $crawler = $this->client->request('GET', '/tasks/5/delete');
+
+        $response = $this->client->getResponse();
+        $this->assertSame(302, $response->getStatusCode());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('div.alert-success:contains("Superbe ! La tâche a bien été supprimée.")')->count());
+    }
 }
