@@ -8,40 +8,11 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\BrowserKit\Cookie;
-use AppBundle\Entity\User;
+use Tests\AppBundle\SetUpTest;
 use Symfony\Component\HttpFoundation\Response;
 
-class SecurityControllerTest extends WebTestCase
+class SecurityControllerTest extends SetUpTest
 {
-    private $client = null;
-
-    /**
-     *
-     */
-    public function setUp()
-    {
-        $this->client = static::createClient();
-    }
-
-    private function loginAsUser()
-    {
-        $session = $this->client->getContainer()->get('session');
-
-        $firewallContext = 'main';
-
-        $user = $this->client->getContainer()->get('doctrine')->getRepository(User::class)->findOneByUsername('Lisy');
-
-        $token = new UsernamePasswordToken($user, $user->getPassword(), $firewallContext, array('ROLE_USER'));
-        $session->set('_security_'.$firewallContext, serialize($token));
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
-    }
-
     /**
      *
      */
@@ -59,6 +30,7 @@ class SecurityControllerTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/login');
 
+        //This user with username Lisy and password lisy is in DB
         $form = $crawler->selectButton('Se connecter')->form();
         $form['_username'] = 'Lisy';
         $form['_password'] = 'lisy';
@@ -79,6 +51,7 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('form')->count());
 
+        //This user with username invalid_username and password invalid_password is not in DB
         $form = $crawler->selectButton('Se connecter')->form();
         $form['_username'] = 'invalid_username';
         $form['_password'] = 'invalid_password';
@@ -104,13 +77,5 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('html:contains("Se connecter")')->count());
-    }
-
-    /**
-     *
-     */
-    public function tearDown()
-    {
-        $this->client = null;
     }
 }

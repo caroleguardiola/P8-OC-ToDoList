@@ -8,65 +8,11 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\BrowserKit\Cookie;
-use AppBundle\Entity\User;
+use Tests\AppBundle\SetUpTest;
 
 
-class UserControllerTest extends WebTestCase
+class UserControllerTest extends SetUpTest
 {
-    private $client = null;
-
-    /**
-     *
-     */
-    public function setUp()
-    {
-        $this->client = static::createClient();
-    }
-
-    /**
-    *
-    */
-    private function logInAsUser()
-    {
-        $session = $this->client->getContainer()->get('session');
-
-        // the firewall context defaults to the firewall name
-        $firewallContext = 'main';
-
-        $user = $this->client->getContainer()->get('doctrine')->getRepository(User::class)->find(1);
-
-        $token = new UsernamePasswordToken($user, $user->getPassword(), $firewallContext, array('ROLE_USER'));
-        $session->set('_security_'.$firewallContext, serialize($token));
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
-    }
-
-    /**
-     *
-     */
-    private function logInAsAdmin()
-    {
-        $session = $this->client->getContainer()->get('session');
-
-        // the firewall context defaults to the firewall name
-        $firewallContext = 'main';
-
-        $user = $this->client->getContainer()->get('doctrine')->getRepository(User::class)->find(2);
-
-        $token = new UsernamePasswordToken($user, $user->getPassword(), $firewallContext, $user->getRoles());
-        $session->set('_security_'.$firewallContext, serialize($token));
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
-    }
-
-
     public function testListUsersWithAdminAction()
     {
         $this->logInAsAdmin();
@@ -79,6 +25,7 @@ class UserControllerTest extends WebTestCase
 
     public function testListUsersWithUserAction()
     {
+        //user has not the permission to access to the management of the users
         $this->logInAsUser();
 
         $crawler = $this->client->request('GET', '/users');
@@ -90,7 +37,7 @@ class UserControllerTest extends WebTestCase
     {
         $this->logInAsAdmin();
 
-        $crawler = $this->client->request('GET', '/users/3/edit');
+        $crawler = $this->client->request('GET', '/users');
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('html:contains("Créer un utilisateur")')->count());
@@ -138,6 +85,16 @@ class UserControllerTest extends WebTestCase
 
     }
 
+    public function testEditPageUserAction()
+    {
+        $this->logInAsAdmin();
+
+        $crawler = $this->client->request('GET', '/users/3/edit');
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Modifier")')->count());
+    }
+
     public function testEditUserAction()
     {
         $this->logInAsAdmin();
@@ -157,10 +114,5 @@ class UserControllerTest extends WebTestCase
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("L\'utilisateur a bien été modifié.")')->count());
 
-    }
-
-    public function tearDown()
-    {
-        $this->client = null;
     }
 }

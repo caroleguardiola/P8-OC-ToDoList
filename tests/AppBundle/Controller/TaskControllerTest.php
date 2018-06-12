@@ -8,66 +8,11 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\BrowserKit\Cookie;
-use AppBundle\Entity\User;
+use Tests\AppBundle\SetUpTest;
 
 
-class TaskControllerTest extends WebTestCase
+class TaskControllerTest extends SetUpTest
 {
-    private $client = null;
-
-    /**
-     *
-     */
-    public function setUp()
-    {
-        $this->client = static::createClient();
-    }
-
-    /**
-     *
-     */
-    private function logInAsUser()
-    {
-        $session = $this->client->getContainer()->get('session');
-
-        // the firewall context defaults to the firewall name
-        $firewallContext = 'main';
-
-        $user = $this->client->getContainer()->get('doctrine')->getRepository(User::class)->find(1);
-
-        $token = new UsernamePasswordToken($user, $user->getPassword(), $firewallContext, array('ROLE_USER'));
-        $session->set('_security_'.$firewallContext, serialize($token));
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
-    }
-
-    /**
-     *
-     */
-    private function logInAsAdmin()
-    {
-        $session = $this->client->getContainer()->get('session');
-
-        // the firewall context defaults to the firewall name
-        $firewallContext = 'main';
-
-        //$user = $this->client->getContainer()->get('doctrine')->getRepository(User::class)->find(2);
-
-        //$token = new UsernamePasswordToken($user, $user->getPassword(), $firewallContext, array('ROLE_ADMIN'));
-
-        $token = new UsernamePasswordToken('admin', null, $firewallContext, array('ROLE_ADMIN'));
-        $session->set('_security_'.$firewallContext, serialize($token));
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
-    }
-
     public function testListTasksAction()
     {
         $this->logInAsUser();
@@ -90,7 +35,7 @@ class TaskControllerTest extends WebTestCase
 
     public function testCreateTaskAction()
     {
-        $this->logInAsUser();
+        $this->logInAsAdmin();
 
         $crawler = $this->client->request('GET', '/tasks/create');
 
@@ -110,7 +55,8 @@ class TaskControllerTest extends WebTestCase
     {
         $this->logInAsUser();
 
-        $crawler = $this->client->request('GET', '/tasks/2/edit');
+        //tasks 1 is a Lisy's task
+        $crawler = $this->client->request('GET', '/tasks/1/edit');
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('html:contains("Title")')->count());
@@ -120,7 +66,8 @@ class TaskControllerTest extends WebTestCase
     {
         $this->logInAsUser();
 
-        $crawler = $this->client->request('GET', '/tasks/2/edit');
+        //tasks 1 is a Lisy's task
+        $crawler = $this->client->request('GET', '/tasks/1/edit');
 
         $form = $crawler->selectButton('Modifier')->form();
         $form['task[title]'] = 'Ma 1ère tâche modifiée';
@@ -138,7 +85,8 @@ class TaskControllerTest extends WebTestCase
     {
         $this->logInAsUser();
 
-        $crawler = $this->client->request('GET', '/tasks/2/toggle');
+        //tasks 1 is a Lisy's task
+        $crawler = $this->client->request('GET', '/tasks/1/toggle');
 
         $response = $this->client->getResponse();
         $this->assertSame(302, $response->getStatusCode());
@@ -152,6 +100,7 @@ class TaskControllerTest extends WebTestCase
     {
         $this->logInAsUser();
 
+        //tasks 4 is a Lisy's task
         $crawler = $this->client->request('GET', '/tasks/4/delete');
 
         $response = $this->client->getResponse();
@@ -166,6 +115,7 @@ class TaskControllerTest extends WebTestCase
     {
         $this->logInAsUser();
 
+        //tasks 5 is not a Lisy's task
         $crawler = $this->client->request('GET', '/tasks/5/delete');
 
         $response = $this->client->getResponse();
@@ -180,7 +130,8 @@ class TaskControllerTest extends WebTestCase
     {
         $this->logInAsAdmin();
 
-        $crawler = $this->client->request('GET', '/tasks/3/delete');
+        //tasks 2 is a Anna's task
+        $crawler = $this->client->request('GET', '/tasks/2/delete');
 
         $response = $this->client->getResponse();
         $this->assertSame(302, $response->getStatusCode());
@@ -194,7 +145,8 @@ class TaskControllerTest extends WebTestCase
     {
         $this->logInAsAdmin();
 
-        $crawler = $this->client->request('GET', '/tasks/5/delete');
+        //tasks 3 is a Anonymous' task
+        $crawler = $this->client->request('GET', '/tasks/3/delete');
 
         $response = $this->client->getResponse();
         $this->assertSame(302, $response->getStatusCode());
@@ -202,10 +154,5 @@ class TaskControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('div.alert-success:contains("Superbe ! La tâche a bien été supprimée.")')->count());
-    }
-
-    public function tearDown()
-    {
-        $this->client = null;
     }
 }
