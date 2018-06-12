@@ -40,8 +40,13 @@ class UpdateRoleUserCommandTest extends WebTestCase
         $commandTester->execute(array(
             'command'  => $command->getName()
         ));
-        
+
         $output = $commandTester->getDisplay();
         $this->assertContains('The users without roles are updated with the role ROLE_USER.', $output);
+    }
+
+    public function tearDown()
+    {
+        $this->client = null;
     }
 }

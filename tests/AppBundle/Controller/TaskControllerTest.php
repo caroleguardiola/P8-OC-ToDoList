@@ -56,9 +56,11 @@ class TaskControllerTest extends WebTestCase
         // the firewall context defaults to the firewall name
         $firewallContext = 'main';
 
-        $user = $this->client->getContainer()->get('doctrine')->getRepository(User::class)->find(2);
+        //$user = $this->client->getContainer()->get('doctrine')->getRepository(User::class)->find(2);
 
-        $token = new UsernamePasswordToken($user, $user->getPassword(), $firewallContext, array('ROLE_ADMIN'));
+        //$token = new UsernamePasswordToken($user, $user->getPassword(), $firewallContext, array('ROLE_ADMIN'));
+
+        $token = new UsernamePasswordToken('admin', null, $firewallContext, array('ROLE_ADMIN'));
         $session->set('_security_'.$firewallContext, serialize($token));
         $session->save();
 
@@ -200,5 +202,10 @@ class TaskControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('div.alert-success:contains("Superbe ! La tâche a bien été supprimée.")')->count());
+    }
+
+    public function tearDown()
+    {
+        $this->client = null;
     }
 }

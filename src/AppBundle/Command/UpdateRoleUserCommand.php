@@ -37,6 +37,3 @@ class UpdateRoleUserCommand extends ContainerAwareCommand
         $output->writeln('The users without roles are updated with the role ROLE_USER.');
     }
 }
-{
-
-}

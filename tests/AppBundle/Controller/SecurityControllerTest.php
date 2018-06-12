@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\BrowserKit\Cookie;
 use AppBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Response;
 
 class SecurityControllerTest extends WebTestCase
 {
@@ -25,14 +26,13 @@ class SecurityControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    private function logInAsUser()
+    private function loginAsUser()
     {
         $session = $this->client->getContainer()->get('session');
 
-        // the firewall context defaults to the firewall name
         $firewallContext = 'main';
 
-        $user = $this->client->getContainer()->get('doctrine')->getRepository(User::class)->find(1);
+        $user = $this->client->getContainer()->get('doctrine')->getRepository(User::class)->findOneByUsername('Lisy');
 
         $token = new UsernamePasswordToken($user, $user->getPassword(), $firewallContext, array('ROLE_USER'));
         $session->set('_security_'.$firewallContext, serialize($token));
@@ -64,14 +64,36 @@ class SecurityControllerTest extends WebTestCase
         $form['_password'] = 'lisy';
         $this->client->submit($form);
 
-        $crawler = $this->client->followRedirect(); // Attention à bien récupérer le crawler mis à jour
+        $crawler = $this->client->followRedirect();
 
         $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur Todo List")')->count());
     }
 
+    /**
+     *
+     */
+    public function testLoginInvalidCredentials()
+    {
+        $crawler = $this->client->request('GET', '/login');
+
+        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('form')->count());
+
+        $form = $crawler->selectButton('Se connecter')->form();
+        $form['_username'] = 'invalid_username';
+        $form['_password'] = 'invalid_password';
+        $this->client->submit($form);
+
+        $crawler = $this->client->followRedirect();
+        $this->assertSame(1, $crawler->filter('div.alert.alert-danger:contains("Invalid credentials")')->count());
+    }
+
+    /**
+     *
+     */
     public function testLogout()
     {
-        $this->logInAsUser();
+        $this->loginAsUser();
 
         $this->client->request('GET', '/logout');
         $this->client->followRedirect();
@@ -82,5 +104,13 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('html:contains("Se connecter")')->count());
+    }
+
+    /**
+     *
+     */
+    public function tearDown()
+    {
+        $this->client = null;
     }
 }

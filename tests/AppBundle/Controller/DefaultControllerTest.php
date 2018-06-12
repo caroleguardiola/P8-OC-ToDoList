@@ -21,11 +21,10 @@ class DefaultControllerTest extends WebTestCase
     /**
      *
      */
-    private function logInAsUser()
+    private function loginAsUser()
     {
         $session = $this->client->getContainer()->get('session');
 
-        // the firewall context defaults to the firewall name
         $firewallContext = 'main';
 
         $token = new UsernamePasswordToken('user', null, $firewallContext, array('ROLE_USER'));
@@ -39,11 +38,10 @@ class DefaultControllerTest extends WebTestCase
     /**
      *
      */
-    private function logInAsAdmin()
+    private function loginAsAdmin()
     {
         $session = $this->client->getContainer()->get('session');
 
-        // the firewall context defaults to the firewall name
         $firewallContext = 'main';
 
         $token = new UsernamePasswordToken('admin', null, $firewallContext, array('ROLE_ADMIN'));
@@ -54,9 +52,12 @@ class DefaultControllerTest extends WebTestCase
         $this->client->getCookieJar()->set($cookie);
     }
 
-    public function testIndexWithUser()
+    /**
+     *
+     */
+    public function testIndexAsUser()
     {
-        $this->logInAsUser();
+        $this->loginAsUser();
 
         $crawler = $this->client->request('GET', '/');
 
@@ -65,14 +66,25 @@ class DefaultControllerTest extends WebTestCase
 
     }
 
-    public function testIndexWithAdmin()
+    /**
+     *
+     */
+    public function testIndexAsAdmin()
     {
-        $this->logInAsAdmin();
+        $this->loginAsAdmin();
 
         $crawler = $this->client->request('GET', '/');
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur Todo List")')->count());
 
+    }
+
+    /**
+     *
+     */
+    public function tearDown()
+    {
+        $this->client = null;
     }
 }

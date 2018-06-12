@@ -158,4 +158,9 @@ class UserControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('div:contains("L\'utilisateur a bien été modifié.")')->count());
 
     }
+
+    public function tearDown()
+    {
+        $this->client = null;
+    }
 }
