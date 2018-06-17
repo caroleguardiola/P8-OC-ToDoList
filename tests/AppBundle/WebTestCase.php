@@ -8,13 +8,16 @@
 
 namespace Tests\AppBundle;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as WTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\BrowserKit\Cookie;
 use AppBundle\Entity\User;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use AppBundle\Command\LoadDatasCommand;
+use Symfony\Component\Console\Tester\CommandTester;
 
 
-class SetUpTest extends WebTestCase
+class WebTestCase extends WTestCase
 {
     protected $client = null;
     protected $container;
@@ -28,6 +31,18 @@ class SetUpTest extends WebTestCase
         $this->client = static::createClient();
         $this->container = $this->client->getContainer();
         $this->entityManager = $this->container->get('doctrine')->getManager();
+
+        $kernel = static::createKernel();
+        $kernel->boot();
+
+        $application = new Application($kernel);
+        $application->add(new LoadDatasCommand());
+
+        $command = $application->find('todolist:loaddatas');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(array(
+            'command'  => $command->getName()
+        ));
     }
 
     /**

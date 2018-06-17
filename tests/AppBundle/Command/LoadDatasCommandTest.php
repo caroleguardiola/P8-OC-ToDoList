@@ -8,24 +8,13 @@
 
 namespace Tests\AppBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use AppBundle\Command\LoadDatasCommand;
 
-class LoadDatasCommandTest extends WebTestCase
+class LoadDatasCommandTest extends KernelTestCase
 {
-    private $client = null;
-
-    /**
-     *
-     */
-    public function setUp()
-    {
-        $this->client = static::createClient();
-    }
-
     public function testExecuteLoadDatasCommand()
     {
         $kernel = static::createKernel();

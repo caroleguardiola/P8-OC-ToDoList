@@ -8,13 +8,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use AppBundle\Model\TaskCreatorInterface;
 
 /**
  * @ORM\Table("user")
  * @ORM\Entity
  * @UniqueEntity("email")
  */
-class User implements UserInterface
+class User implements UserInterface, TaskCreatorInterface
 {
     /**
      * @ORM\Column(type="integer")

@@ -11,7 +11,6 @@ namespace Tests\AppBundle\Entity;
 use PHPUnit\Framework\TestCase;
 use AppBundle\Entity\Task;
 use AppBundle\Entity\User;
-use AppBundle\Entity\AnonymousUser;
 
 
 class UserTest extends TestCase

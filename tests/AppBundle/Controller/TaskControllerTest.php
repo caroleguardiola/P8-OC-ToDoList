@@ -8,10 +8,10 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Tests\AppBundle\SetUpTest;
+use Tests\AppBundle\WebTestCase;
 
 
-class TaskControllerTest extends SetUpTest
+class TaskControllerTest extends WebTestCase
 {
     public function testListTasksAction()
     {
@@ -93,7 +93,7 @@ class TaskControllerTest extends SetUpTest
 
         $crawler = $this->client->followRedirect();
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->filter('div.alert-success:contains("La tâche Ma 1ère tâche modifiée a bien été marquée comme faite.")')->count());
+        $this->assertSame(1, $crawler->filter('div.alert-success:contains("La tâche 1ère tâche a bien été marquée comme faite.")')->count());
     }
 
     public function testDeleteTaskWithUserAction()

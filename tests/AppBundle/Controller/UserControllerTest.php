@@ -8,10 +8,10 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Tests\AppBundle\SetUpTest;
+use Tests\AppBundle\WebTestCase;
 
 
-class UserControllerTest extends SetUpTest
+class UserControllerTest extends WebTestCase
 {
     public function testListUsersWithAdminAction()
     {

@@ -2,9 +2,9 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Tests\AppBundle\SetUpTest;
+use Tests\AppBundle\WebTestCase;
 
-class DefaultControllerTest extends SetUpTest
+class DefaultControllerTest extends WebTestCase
 {
     /**
      *

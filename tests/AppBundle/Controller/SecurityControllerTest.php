@@ -8,10 +8,10 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Tests\AppBundle\SetUpTest;
+use Tests\AppBundle\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class SecurityControllerTest extends SetUpTest
+class SecurityControllerTest extends WebTestCase
 {
     /**
      *

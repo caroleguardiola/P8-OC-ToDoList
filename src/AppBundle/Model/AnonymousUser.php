@@ -6,9 +6,9 @@
  * Time: 21:31
  */
 
-namespace AppBundle\Entity;
+namespace AppBundle\Model;
 
-class AnonymousUser
+class AnonymousUser implements TaskCreatorInterface
 {
     public function getUsername()
     {

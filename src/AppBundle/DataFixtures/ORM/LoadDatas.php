@@ -61,12 +61,12 @@ class LoadDatas implements FixtureInterface, ContainerAwareInterface
         $manager->persist($user2);
 
         $user3 = new User;
-        $user3->setUsername('Taly');
-        $user3->setEmail('taly.nolan@gmail.com');
+        $user3->setUsername('Tally');
+        $user3->setEmail('tally.nolan@gmail.com');
         $user3->setRole('ROLE_USER');
 
         $passwordEncoder = $this->container->get('security.password_encoder');
-        $password = $passwordEncoder->encodePassword($user3, 'taly');
+        $password = $passwordEncoder->encodePassword($user3, 'tally');
         $user3->setPassword($password);
 
         $manager->persist($user3);

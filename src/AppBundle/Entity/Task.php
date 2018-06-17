@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Model\AnonymousUser;
 
 /**
  * @ORM\Entity
@@ -110,6 +111,7 @@ class Task
         return $this;
     }
 
+
     /**
      * @return AnonymousUser
      */
@@ -122,6 +124,10 @@ class Task
             }
         }
 
+    /**
+     * @param $user
+     * @return bool
+     */
     public function canBeDeletedBy($user)
     {
         return $this->getUser()->canBeManagedBy($user);
