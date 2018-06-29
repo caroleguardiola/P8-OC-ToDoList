@@ -15,13 +15,19 @@ use AppBundle\Entity\User;
 
 class TaskTest extends TestCase
 {
-    public function testCreatedAtTask()
+    /**
+     *
+     */
+    public function testSetCreatedAtTask()
     {
         $task = new Task;
         $task->setCreatedAt('2018-05-14 17:30:00');
         $this->assertSame('2018-05-14 17:30:00', $task->getCreatedAt());
     }
 
+    /**
+     *
+     */
     public function testSetTitleTask()
     {
         $task = new Task;
@@ -29,6 +35,9 @@ class TaskTest extends TestCase
         $this->assertSame('Tâche n°1', $task->getTitle());
     }
 
+    /**
+     *
+     */
     public function testSetContentTask()
     {
         $task = new Task;
@@ -36,6 +45,9 @@ class TaskTest extends TestCase
         $this->assertSame('Tâche n°1 contenu', $task->getContent());
     }
 
+    /**
+     *
+     */
     public function testToggleTask()
     {
         $task = new Task;
@@ -43,6 +55,9 @@ class TaskTest extends TestCase
         $this->assertSame(true, $task->isDone());
     }
 
+    /**
+     *
+     */
     public function testSetUserTask()
     {
         $user = new User;

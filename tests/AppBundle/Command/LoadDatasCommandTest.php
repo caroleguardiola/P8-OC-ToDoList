@@ -15,6 +15,9 @@ use AppBundle\Command\LoadDatasCommand;
 
 class LoadDatasCommandTest extends KernelTestCase
 {
+    /**
+     *
+     */
     public function testExecuteLoadDatasCommand()
     {
         $kernel = static::createKernel();
@@ -33,6 +36,9 @@ class LoadDatasCommandTest extends KernelTestCase
         $this->assertContains('Database schema updated successfully!', $output);
     }
 
+    /**
+     *
+     */
     public function tearDown()
     {
         $this->client = null;

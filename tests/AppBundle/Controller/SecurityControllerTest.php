@@ -8,10 +8,9 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Tests\AppBundle\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
+use Tests\AppBundle\AppWebTestCase;
 
-class SecurityControllerTest extends WebTestCase
+class SecurityControllerTest extends AppWebTestCase
 {
     /**
      *
@@ -28,12 +27,13 @@ class SecurityControllerTest extends WebTestCase
      */
     public function testLogin()
     {
+        $user = $this->createUserForLogin('ROLE_USER', 'password');
+
         $crawler = $this->client->request('GET', '/login');
 
-        //This user with username Lisy and password lisy is in DB
         $form = $crawler->selectButton('Se connecter')->form();
-        $form['_username'] = 'Lisy';
-        $form['_password'] = 'lisy';
+        $form['_username'] = $user->getUsername();
+        $form['_password'] = 'password';
         $this->client->submit($form);
 
         $crawler = $this->client->followRedirect();
@@ -44,14 +44,51 @@ class SecurityControllerTest extends WebTestCase
     /**
      *
      */
+    public function testLoginInvalidUsername()
+    {
+        $this->createUserForLogin('ROLE_USER', 'password');
+
+        $crawler = $this->client->request('GET', '/login');
+
+        $form = $crawler->selectButton('Se connecter')->form();
+        $form['_username'] = 'invalid_username';
+        $form['_password'] = 'password';
+        $this->client->submit($form);
+
+        $crawler = $this->client->followRedirect();
+
+        $this->assertSame(1, $crawler->filter('div.alert.alert-danger:contains("Invalid credentials")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testLoginInvalidPassword()
+    {
+        $user = $this->createUserForLogin('ROLE_USER', 'password');
+
+        $crawler = $this->client->request('GET', '/login');
+
+        $form = $crawler->selectButton('Se connecter')->form();
+        $form['_username'] = $user->getUsername();
+        $form['_password'] = 'invalid_password';
+        $this->client->submit($form);
+
+        $crawler = $this->client->followRedirect();
+
+        $this->assertSame(1, $crawler->filter('div.alert.alert-danger:contains("Invalid credentials")')->count());
+    }
+
+    /**
+     *
+     */
     public function testLoginInvalidCredentials()
     {
         $crawler = $this->client->request('GET', '/login');
 
-        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('form')->count());
 
-        //This user with username invalid_username and password invalid_password is not in DB
         $form = $crawler->selectButton('Se connecter')->form();
         $form['_username'] = 'invalid_username';
         $form['_password'] = 'invalid_password';
@@ -66,7 +103,7 @@ class SecurityControllerTest extends WebTestCase
      */
     public function testLogout()
     {
-        $this->loginAsUser();
+        $this->logInAs('user');
 
         $this->client->request('GET', '/logout');
         $this->client->followRedirect();

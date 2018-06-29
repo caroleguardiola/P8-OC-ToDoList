@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Model\TaskCreatorInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Model\AnonymousUser;
@@ -113,7 +114,7 @@ class Task
 
 
     /**
-     * @return AnonymousUser
+     * @return TaskCreatorInterface
      */
     public function getUser()
     {

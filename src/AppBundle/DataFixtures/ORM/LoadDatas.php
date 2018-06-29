@@ -30,7 +30,66 @@ class LoadDatas implements FixtureInterface, ContainerAwareInterface
         $this->container = $container;
     }
 
+    /**
+     * @return object
+     */
+    public function getEntityManager()
+    {
+        return $this->container->get('doctrine.orm.entity_manager');
+    }
+
+    /**
+     * @return object
+     */
+    public function getSecurityPasswordEncoder()
+    {
+        return $this->container->get('security.password_encoder');
+    }
+
     // Dans l'argument de la méthode load, l'objet $manager est l'EntityManager
+
+    /**
+     * @param $username
+     * @param $email
+     * @param $role
+     * @param $password
+     * @return User
+     */
+    protected function createUserForDemo($username, $email, $role, $password)
+    {
+        $user = new User;
+        $user->setUsername($username);
+        $user->setEmail($email);
+        $user->setRole($role);
+
+        $passwordEncoder = $this->getSecurityPasswordEncoder();
+        $passwordEncode = $passwordEncoder->encodePassword($user, $password);
+        $user->setPassword($passwordEncode);
+
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
+
+        return $user;
+    }
+
+    /**
+     * @param $title
+     * @param $content
+     * @param $user
+     * @return Task
+     */
+    protected function createTaskForDemo($title, $content, $user)
+    {
+        $task = new Task;
+        $task->setTitle($title);
+        $task->setContent($content);
+        $task->setUser($user);
+
+        $this->getEntityManager()->persist($task);
+        $this->getEntityManager()->flush();
+
+        return $task;
+    }
 
     /**
      * @param ObjectManager $manager
@@ -38,68 +97,28 @@ class LoadDatas implements FixtureInterface, ContainerAwareInterface
     public function load(ObjectManager $manager)
     {
         //Users
-        $user1 = new User;
-        $user1->setUsername('Lisy');
-        $user1->setEmail('lisy.moon@gmail.com');
-        $user1->setRole('ROLE_USER');
-
-        $passwordEncoder = $this->container->get('security.password_encoder');
-        $password = $passwordEncoder->encodePassword($user1, 'lisy');
-        $user1->setPassword($password);
-
+        $user = $this->createUserForDemo('user', 'user@example.com', 'ROLE_USER', 'password');
+        $admin = $this->createUserForDemo('admin', 'admin@example.com', 'ROLE_ADMIN', 'password');
+        $user1 = $this->createUserForDemo('Lisy', 'lisy@example.com', 'ROLE_USER', 'password');
+        $user2 = $this->createUserForDemo('Anna', 'anna@example.com', 'ROLE_ADMIN', 'password');
+        $user3 = $this->createUserForDemo('Tally', 'tally@example.com', 'ROLE_USER', 'password');
+        $manager->persist($user);
+        $manager->persist($admin);
         $manager->persist($user1);
-
-        $user2 = new User;
-        $user2->setUsername('Anna');
-        $user2->setEmail('anna.dillo@gmail.com');
-        $user2->setRole('ROLE_ADMIN');
-
-        $passwordEncoder = $this->container->get('security.password_encoder');
-        $password = $passwordEncoder->encodePassword($user2, 'anna');
-        $user2->setPassword($password);
-
         $manager->persist($user2);
-
-        $user3 = new User;
-        $user3->setUsername('Tally');
-        $user3->setEmail('tally.nolan@gmail.com');
-        $user3->setRole('ROLE_USER');
-
-        $passwordEncoder = $this->container->get('security.password_encoder');
-        $password = $passwordEncoder->encodePassword($user3, 'tally');
-        $user3->setPassword($password);
-
         $manager->persist($user3);
 
+
         //Tasks
-        $task1 = new Task;
-        $task1->setTitle('1ère tâche');
-        $task1->setContent('Contenu de la 1ère tâche.');
-        $task1->setUser($user1);
+        $task1 = $this->createTaskForDemo('1ère tâche', 'Contenu de la 1ère tâche.', $user1);
+        $task2 = $this->createTaskForDemo('2ème tâche', 'Contenu de la 2ème tâche.', $user2);
+        $task3 = $this->createTaskForDemo('3ème tâche', 'Contenu de la 3ème tâche.', null);
+        $task4 = $this->createTaskForDemo('4ème tâche', 'Contenu de la 4ème tâche.', $user1);
+        $task5 = $this->createTaskForDemo('5ème tâche', 'Contenu de la 5ème tâche.', $user3);
         $manager->persist($task1);
-
-        $task2 = new Task;
-        $task2->setTitle('2ème tâche');
-        $task2->setContent('Contenu de la 2ème tâche.');
-        $task2->setUser($user2);
         $manager->persist($task2);
-
-        $task3 = new Task;
-        $task3->setTitle('3ème tâche');
-        $task3->setContent('Contenu de la 3ème tâche.');
-        $task3->setUser(null);
         $manager->persist($task3);
-
-        $task4 = new Task;
-        $task4->setTitle('4ème tâche');
-        $task4->setContent('Contenu de la 4ème tâche.');
-        $task4->setUser($user1);
         $manager->persist($task4);
-
-        $task5 = new Task;
-        $task5->setTitle('5ème tâche');
-        $task5->setContent('Contenu de la 5ème tâche.');
-        $task5->setUser($user3);
         $manager->persist($task5);
 
         // On déclenche l'enregistrement

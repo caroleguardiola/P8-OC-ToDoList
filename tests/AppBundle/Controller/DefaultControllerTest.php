@@ -2,16 +2,31 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Tests\AppBundle\WebTestCase;
+use Tests\AppBundle\AppWebTestCase;
 
-class DefaultControllerTest extends WebTestCase
+class DefaultControllerTest extends AppWebTestCase
 {
+    /**
+     *
+     */
+    public function testIndexAsAnonymous()
+    {
+        $this->client->request('GET', '/');
+
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Se connecter")')->count());
+
+    }
+
     /**
      *
      */
     public function testIndexAsUser()
     {
-        $this->loginAsUser();
+        $this->logInAs('user');
 
         $crawler = $this->client->request('GET', '/');
 
@@ -25,7 +40,7 @@ class DefaultControllerTest extends WebTestCase
      */
     public function testIndexAsAdmin()
     {
-        $this->loginAsAdmin();
+        $this->logInAs('admin');
 
         $crawler = $this->client->request('GET', '/');
 

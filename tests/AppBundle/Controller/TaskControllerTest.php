@@ -8,14 +8,31 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Tests\AppBundle\WebTestCase;
+use Tests\AppBundle\AppWebTestCase;
+use AppBundle\Entity\Task;
 
-
-class TaskControllerTest extends WebTestCase
+class TaskControllerTest extends AppWebTestCase
 {
-    public function testListTasksAction()
+    /**
+     *
+     */
+    public function testListTasksAsAnonymousAction()
     {
-        $this->logInAsUser();
+        $this->client->request('GET', '/tasks');
+
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $crawler = $this->client->followRedirect();
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Se connecter")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testListTasksAsUserAction()
+    {
+        $this->logInAs('user');
 
         $crawler = $this->client->request('GET', '/tasks');
 
@@ -23,9 +40,73 @@ class TaskControllerTest extends WebTestCase
         $this->assertSame(1, $crawler->filter('html:contains("Créer une tâche")')->count());
     }
 
-    public function testCreatePageTaskAction()
+    /**
+     *
+     */
+    public function testListTasksAsAdminAction()
     {
-        $this->logInAsUser();
+        $this->logInAs('admin');
+
+        $crawler = $this->client->request('GET', '/tasks');
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Créer une tâche")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testCreateButtonTaskAsUserAction()
+    {
+        $this->logInAs('user');
+
+        $crawler = $this->client->request('GET', '/');
+
+        $link = $crawler->selectLink('Créer une nouvelle tâche')->link();
+        $crawler = $this->client->click($link);
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Title")')->count());
+        $this->assertSame(1, $crawler->filter('form')->count());
+    }
+
+    /**
+     *
+     */
+    public function testCreateButtonTaskAsAdminAction()
+    {
+        $this->logInAs('admin');
+
+        $crawler = $this->client->request('GET', '/');
+
+        $link = $crawler->selectLink('Créer une nouvelle tâche')->link();
+        $crawler = $this->client->click($link);
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Title")')->count());
+        $this->assertSame(1, $crawler->filter('form')->count());
+    }
+
+    /**
+     *
+     */
+    public function testCreatePageTaskAsAnonymousAction()
+    {
+        $this->client->request('GET', '/tasks/create');
+
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $crawler = $this->client->followRedirect();
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Se connecter")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testCreatePageTaskAsUserAction()
+    {
+        $this->logInAs('user');
 
         $crawler = $this->client->request('GET', '/tasks/create');
 
@@ -33,75 +114,261 @@ class TaskControllerTest extends WebTestCase
         $this->assertSame(1, $crawler->filter('html:contains("Title")')->count());
     }
 
-    public function testCreateTaskAction()
+    /**
+     *
+     */
+    public function testCreatePageTaskAsAdminAction()
     {
-        $this->logInAsAdmin();
+        $this->logInAs('user');
+
+        $crawler = $this->client->request('GET', '/tasks/create');
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Title")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testCreateTaskAsUserAction()
+    {
+        $this->logInAs('user');
 
         $crawler = $this->client->request('GET', '/tasks/create');
 
         $form = $crawler->selectButton('Ajouter')->form();
-        $form['task[title]'] = 'Ma 1ère tâche';
-        $form['task[content]'] = 'Ma 1ère tâche';
+        $form['task[title]'] = 'Tâche de test à créer';
+        $form['task[content]'] = 'Contenu de la tâche de test à créer';
         $this->client->submit($form);
 
-        $crawler = $this->client->followRedirect(); // Attention à bien récupérer le crawler mis à jour
+        $crawler = $this->client->followRedirect();
+
+        $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        $this->assertGreaterThan(0, $crawler->filter('div:contains("La tâche a été bien été ajoutée.")')->count());
+
+        $userTaskCreated = $this->getEntityManager()->getRepository(Task::class)->findOneBy(['title' => 'Tâche de test à créer']);
+        $this->assertSame('user', $userTaskCreated->getUser()->getUsername());
+    }
+
+    /**
+     *
+     */
+    public function testCreateTaskAsAdminAction()
+    {
+        $this->logInAs('admin');
+
+        $crawler = $this->client->request('GET', '/tasks/create');
+
+        $form = $crawler->selectButton('Ajouter')->form();
+        $form['task[title]'] = 'Tâche de test à créer';
+        $form['task[content]'] = 'Contenu de la tâche de test à créer';
+        $this->client->submit($form);
+
+        $crawler = $this->client->followRedirect();
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("La tâche a été bien été ajoutée.")')->count());
 
     }
 
-    public function testEditPageTaskAction()
+    /**
+     *
+     */
+    public function testCreateTaskEmptyAsUserAction()
     {
-        $this->logInAsUser();
+        $this->logInAs('user');
 
-        //tasks 1 is a Lisy's task
-        $crawler = $this->client->request('GET', '/tasks/1/edit');
+        $crawler = $this->client->request('GET', '/tasks/create');
+
+        $form = $crawler->selectButton('Ajouter')->form();
+        $form['task[title]'] = '';
+        $form['task[content]'] = '';
+
+        $crawler = $this->client->submit($form);
+        $this->assertSame(1, $crawler->filter('html:contains("Vous devez saisir un titre.")')->count());
+        $this->assertSame(1, $crawler->filter('html:contains("Vous devez saisir du contenu.")')->count());
+
+    }
+
+    /**
+     *
+     */
+    public function testCreateTaskWithoutTitleAsUserAction()
+    {
+        $this->logInAs('user');
+
+        $crawler = $this->client->request('GET', '/tasks/create');
+
+        $form = $crawler->selectButton('Ajouter')->form();
+        $form['task[title]'] = '';
+        $form['task[content]'] = 'Contenu';
+
+        $crawler = $this->client->submit($form);
+        $this->assertSame(1, $crawler->filter('html:contains("Vous devez saisir un titre.")')->count());
+        $this->assertSame(0, $crawler->filter('html:contains("Vous devez saisir du contenu.")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testCreateTaskWithoutContentAsUserAction()
+    {
+        $this->logInAs('user');
+
+        $crawler = $this->client->request('GET', '/tasks/create');
+
+        $form = $crawler->selectButton('Ajouter')->form();
+        $form['task[title]'] = 'Tâche';
+        $form['task[content]'] = '';
+
+        $crawler = $this->client->submit($form);
+        $this->assertSame(0, $crawler->filter('html:contains("Vous devez saisir un titre.")')->count());
+        $this->assertSame(1, $crawler->filter('html:contains("Vous devez saisir du contenu.")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testConsultListButtonTaskAction()
+    {
+        $this->logInAs('user');
+
+        $crawler = $this->client->request('GET', '/');
+
+        $link = $crawler->selectLink('Consulter la liste des tâches à faire')->link();
+        $crawler = $this->client->click($link);
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Créer une tâche")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testEditPageAsAnonymousTaskAction()
+    {
+        $task = $this->createTask(null);
+
+        $this->client->request('GET', 'tasks/'. $task->getId() .'/edit');
+
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Se connecter")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testEditPageAsUserTaskAction()
+    {
+        $user = $this->logInAs('user');
+        $task = $this->createTask($user);
+
+        $crawler = $this->client->request('GET', 'tasks/'. $task->getId() .'/edit');
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('html:contains("Title")')->count());
     }
 
+    /**
+     *
+     */
+    public function testEditPageAsAdminTaskAction()
+    {
+        $admin = $this->logInAs('admin');
+        $task = $this->createTask($admin);
+
+        $crawler = $this->client->request('GET', 'tasks/'. $task->getId() .'/edit');
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Title")')->count());
+    }
+
+    /**
+     *
+     */
     public function testEditTaskAction()
     {
-        $this->logInAsUser();
+        $user = $this->logInAs('user');
+        $task = $this->createTask($user);
 
-        //tasks 1 is a Lisy's task
-        $crawler = $this->client->request('GET', '/tasks/1/edit');
+        $crawler = $this->client->request('GET', 'tasks/'. $task->getId() .'/edit');
 
         $form = $crawler->selectButton('Modifier')->form();
         $form['task[title]'] = 'Ma 1ère tâche modifiée';
         $form['task[content]'] = 'Ma 1ère tâche modifiée';
         $this->client->submit($form);
 
-        $crawler = $this->client->followRedirect(); // Attention à bien récupérer le crawler mis à jour
+        $crawler = $this->client->followRedirect();
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("La tâche a bien été modifiée.")')->count());
 
     }
 
-    public function testToggleTaskAction()
+    /**
+     *
+     */
+    public function testToggleTaskAsAnonymousAction()
     {
-        $this->logInAsUser();
+        $task = $this->createTask(null);
 
-        //tasks 1 is a Lisy's task
-        $crawler = $this->client->request('GET', '/tasks/1/toggle');
+        $this->client->request('GET', 'tasks/'. $task->getId() .'/toggle');
+
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Se connecter")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testToggleTaskAsUserAction()
+    {
+        $user = $this->logInAs('user');
+        $task = $this->createTask($user);
+
+        $this->client->request('GET', 'tasks/'. $task->getId() .'/toggle');
 
         $response = $this->client->getResponse();
         $this->assertSame(302, $response->getStatusCode());
 
         $crawler = $this->client->followRedirect();
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->filter('div.alert-success:contains("La tâche 1ère tâche a bien été marquée comme faite.")')->count());
+        $this->assertSame(1, $crawler->filter('div.alert-success:contains("a bien été marquée comme faite.")')->count());
     }
 
-    public function testDeleteTaskWithUserAction()
+    /**
+     *
+     */
+    public function testToggleTaskAsAdminAction()
     {
-        $this->logInAsUser();
+        $admin = $this->logInAs('admin');
+        $task = $this->createTask($admin);
 
-        //tasks 4 is a Lisy's task
-        $crawler = $this->client->request('GET', '/tasks/4/delete');
+        $this->client->request('GET', 'tasks/'. $task->getId() .'/toggle');
+
+        $response = $this->client->getResponse();
+        $this->assertSame(302, $response->getStatusCode());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('div.alert-success:contains("a bien été marquée comme faite.")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testDeleteTaskAsUserAction()
+    {
+        $user = $this->logInAs('user');
+        $task = $this->createTask($user);
+
+        $this->client->request('GET', 'tasks/'. $task->getId() .'/delete');
 
         $response = $this->client->getResponse();
         $this->assertSame(302, $response->getStatusCode());
@@ -111,27 +378,32 @@ class TaskControllerTest extends WebTestCase
         $this->assertSame(1, $crawler->filter('div.alert-success:contains("Superbe ! La tâche a bien été supprimée.")')->count());
     }
 
-    public function testDeleteTaskWithNotGoodUserAction()
+    /**
+     *
+     */
+    public function testDeleteTaskAsNotGoodUserAction()
     {
-        $this->logInAsUser();
+        $this->logInAs('user');
 
-        //tasks 5 is not a Lisy's task
-        $crawler = $this->client->request('GET', '/tasks/5/delete');
+        $user = $this->createUser('ROLE_USER');
+        $task = $this->createTask($user);
+
+        $this->client->request('GET', 'tasks/'. $task->getId() .'/delete');
 
         $response = $this->client->getResponse();
-
-        //$this->expectException(\Exception::class);
-        //$this->expectExceptionMessage('Vous n\'avez pas la permission de supprimer cette tâche.');
 
         $this->assertSame(500, $response->getStatusCode());
     }
 
-    public function testDeleteTaskwithAdminAction()
+    /**
+     *
+     */
+    public function testDeleteTaskAsAdminAction()
     {
-        $this->logInAsAdmin();
+        $admin = $this->logInAs('admin');
+        $task = $this->createTask($admin);
 
-        //tasks 2 is a Anna's task
-        $crawler = $this->client->request('GET', '/tasks/2/delete');
+        $this->client->request('GET', 'tasks/'. $task->getId() .'/delete');
 
         $response = $this->client->getResponse();
         $this->assertSame(302, $response->getStatusCode());
@@ -141,12 +413,16 @@ class TaskControllerTest extends WebTestCase
         $this->assertSame(1, $crawler->filter('div.alert-success:contains("Superbe ! La tâche a bien été supprimée.")')->count());
     }
 
-    public function testDeleteAnonymousTaskwithAdminAction()
+    /**
+     *
+     */
+    public function testDeleteAnonymousTaskAsAdminAction()
     {
-        $this->logInAsAdmin();
+        $this->logInAs('admin');
 
-        //tasks 3 is a Anonymous' task
-        $crawler = $this->client->request('GET', '/tasks/3/delete');
+        $task = $this->createTask(null);
+
+        $this->client->request('GET', 'tasks/'. $task->getId() .'/delete');
 
         $response = $this->client->getResponse();
         $this->assertSame(302, $response->getStatusCode());
@@ -154,5 +430,20 @@ class TaskControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('div.alert-success:contains("Superbe ! La tâche a bien été supprimée.")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testDeleteAnonymousTaskAsUserAction()
+    {
+        $this->logInAs('user');
+
+        $task = $this->createTask(null);
+
+        $this->client->request('GET', 'tasks/'. $task->getId() .'/delete');
+
+        $response = $this->client->getResponse();
+        $this->assertSame(500, $response->getStatusCode());
     }
 }

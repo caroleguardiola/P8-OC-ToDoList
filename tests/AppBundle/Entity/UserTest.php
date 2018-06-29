@@ -15,13 +15,29 @@ use AppBundle\Entity\User;
 
 class UserTest extends TestCase
 {
+    /**
+     *
+     */
+    public function testSetUsernameUser()
+    {
+        $user = new User;
+        $user->setUSername('Lisy');
+        $this->assertSame('Lisy', $user->getUsername());
+    }
+
+    /**
+     *
+     */
     public function testSetEmailUser()
     {
         $user = new User;
-        $user->setEmail('lisy@gmail.com');
-        $this->assertSame('lisy@gmail.com', $user->getEmail());
+        $user->setEmail('lisy@example.com');
+        $this->assertSame('lisy@example.com', $user->getEmail());
     }
 
+    /**
+     *
+     */
     public function testSetRoleUser()
     {
         $user = new User;
@@ -29,6 +45,9 @@ class UserTest extends TestCase
         $this->assertSame('ROLE_USER', $user->getRole());
     }
 
+    /**
+     *
+     */
     public function testSetTaskUser()
     {
         $task1 = new Task;

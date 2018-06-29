@@ -10,11 +10,18 @@ namespace AppBundle\Model;
 
 class AnonymousUser implements TaskCreatorInterface
 {
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return 'Anonymous';
     }
 
+    /**
+     * @param $otherUser
+     * @return bool
+     */
     public function canBeManagedBy($otherUser)
     {
         if(in_array('ROLE_ADMIN',$otherUser->getRoles())) {
