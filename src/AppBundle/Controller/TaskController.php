@@ -87,18 +87,16 @@ class TaskController extends Controller
      */
     public function deleteTaskAction(Task $task)
     {
-        $user = $this->getUser()->getId();
+        $user = $this->getUser();
 
-        $taskUser = $task->getUser()->getUsername();
-
-        if ($user === $task->getUser()->getId() || (($taskUser === 'Anonymous') && $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))){
+        if ($task->canBeDeletedBy($user)){
             $em = $this->getDoctrine()->getManager();
             $em->remove($task);
             $em->flush();
         }
-        else
+        else {
             throw new \Exception("Vous n'avez pas la permission de supprimer cette tâche.");
-
+        }
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 

@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
-class UpdateRolesUserCommand extends ContainerAwareCommand
+class UpdateRoleUserCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -29,14 +29,11 @@ class UpdateRolesUserCommand extends ContainerAwareCommand
         $users = $em->getRepository('AppBundle:User')->findAll();
 
         foreach ($users as $user) {
-            if (empty($user->getRoles())) {
-                $user->setRoles(['ROLE_USER']);
+            if (empty($user->getRole())) {
+                $user->setRole('ROLE_USER');
             }
             $em->flush();
         }
         $output->writeln('The users without roles are updated with the role ROLE_USER.');
     }
-}
-{
-
 }

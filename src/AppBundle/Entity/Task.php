@@ -2,8 +2,10 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Model\TaskCreatorInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Model\AnonymousUser;
 
 /**
  * @ORM\Entity
@@ -97,20 +99,6 @@ class Task
     }
 
     /**
-     * Set isDone.
-     *
-     * @param bool $isDone
-     *
-     * @return Task
-     */
-    public function setIsDone($isDone)
-    {
-        $this->isDone = $isDone;
-
-        return $this;
-    }
-
-    /**
      * Set user.
      *
      * @param User|null $user
@@ -126,16 +114,23 @@ class Task
 
 
     /**
-     * @return AnonymousUser
+     * @return TaskCreatorInterface
      */
     public function getUser()
     {
-        {
             if (is_null($this->user)) {
                 return new AnonymousUser();
             }else {
                 return  $this->user;
             }
         }
+
+    /**
+     * @param $user
+     * @return bool
+     */
+    public function canBeDeletedBy($user)
+    {
+        return $this->getUser()->canBeManagedBy($user);
     }
 }

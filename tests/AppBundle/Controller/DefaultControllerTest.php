@@ -2,17 +2,50 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Tests\AppBundle\AppWebTestCase;
 
-class DefaultControllerTest extends WebTestCase
+class DefaultControllerTest extends AppWebTestCase
 {
-    public function testIndex()
+    /**
+     *
+     */
+    public function testIndexAsAnonymous()
     {
-        $client = static::createClient();
+        $this->client->request('GET', '/');
 
-        $crawler = $client->request('GET', '/');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
+        $crawler = $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Se connecter")')->count());
+
+    }
+
+    /**
+     *
+     */
+    public function testIndexAsUser()
+    {
+        $this->logInAs('user');
+
+        $crawler = $this->client->request('GET', '/');
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur Todo List")')->count());
+
+    }
+
+    /**
+     *
+     */
+    public function testIndexAsAdmin()
+    {
+        $this->logInAs('admin');
+
+        $crawler = $this->client->request('GET', '/');
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur Todo List")')->count());
+
     }
 }
