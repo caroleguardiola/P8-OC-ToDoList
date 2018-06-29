@@ -15,7 +15,8 @@ web_profiler:
 swiftmailer:
     disable_delivery: true
 
-#doctrine:
-#    dbal:
+doctrine:
+    dbal:
 #        driver:   pdo_sqlite
-#        memory:   true
+#       memory:   true
+        dbname: '%database_name%_test'
