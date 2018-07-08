@@ -5,6 +5,8 @@ filter:
     excluded_paths:
         - tests/*
         - web/js/bootstrap.js
+        - web/js/bootstrap.min.js
+        - web/test-coverage
         - var/*
 
 build:
