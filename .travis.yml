@@ -1,3 +1,7 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=1f5eb8205e47116f2e65fa0d30a7c6a547b9fdb272a93afe99be6c4890ce4f93
+
 language: php
 php:
   - '7.1'
@@ -5,11 +9,16 @@ php:
 before_script:
   - curl -s http://getcomposer.org/installer | php
   - composer install -n
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 script:
    - php bin/console doctrine:database:create --env=test
    - php bin/console doctrine:schema:create --env=test
    - vendor/bin/phpunit --coverage-clover build/coverage/xml
+   - bundle exec rspec
 
 after_script:
    - vendor/bin/codacycoverage clover build/coverage/xml
+   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
