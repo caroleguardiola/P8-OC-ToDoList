@@ -17,6 +17,7 @@ script:
    - php bin/console doctrine:database:create --env=test
    - php bin/console doctrine:schema:create --env=test
    - vendor/bin/phpunit --coverage-clover build/coverage/xml
+   - vendor/bin/phpunit --coverage-clover ./cc-test-reporter
 
 after_script:
    - vendor/bin/codacycoverage clover build/coverage/xml
