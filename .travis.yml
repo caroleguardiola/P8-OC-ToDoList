@@ -5,11 +5,16 @@ php:
 before_script:
   - curl -s http://getcomposer.org/installer | php
   - composer install -n
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 script:
    - php bin/console doctrine:database:create --env=test
    - php bin/console doctrine:schema:create --env=test
-   - vendor/bin/phpunit --coverage-clover build/coverage/xml
+   #- vendor/bin/phpunit --coverage-clover build/coverage/xml
+   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_script:
-   - vendor/bin/codacycoverage clover build/coverage/xml
+   #- vendor/bin/codacycoverage clover build/coverage/xml
+   - ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT
