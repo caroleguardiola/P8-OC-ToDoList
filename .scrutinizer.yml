@@ -1,0 +1,17 @@
+checks:
+    php: true
+
+filter:
+    excluded_paths:
+        - tests/*
+        - web/js/bootstrap.js
+        - var/*
+
+build:
+    tests:
+        override:
+            -
+                command: 'vendor/bin/phpunit --coverage-clover=build/coverage-scrutinizer/index'
+                coverage:
+                    file: build/coverage-scrutinizer/index
+                    format: 'clover'
