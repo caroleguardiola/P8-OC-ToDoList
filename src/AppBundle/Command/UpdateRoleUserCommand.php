@@ -25,14 +25,14 @@ class UpdateRoleUserCommand extends ContainerAwareCommand
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $users = $em->getRepository('AppBundle:User')->findAll();
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $users = $entityManager->getRepository('AppBundle:User')->findAll();
 
         foreach ($users as $user) {
             if (empty($user->getRole())) {
                 $user->setRole('ROLE_USER');
             }
-            $em->flush();
+            $entityManager->flush();
         }
         $output->writeln('The users without roles are updated with the role ROLE_USER.');
     }
