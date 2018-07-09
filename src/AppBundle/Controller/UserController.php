@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
-use AppBundle\Form\UserType;
+use AppBundle\Form\Type\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,12 +34,12 @@ class UserController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $entityManager = $this->getDoctrine()->getManager();
             $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $em->persist($user);
-            $em->flush();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 

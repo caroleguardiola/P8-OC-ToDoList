@@ -1,10 +1,21 @@
 {
-    "name": "saro0h/to-do-list",
+    "name": "to-do-list/to-do-list",
+    "description": "Improve an existing Symfony application of ToDo&Co.",
     "license": "proprietary",
     "type": "project",
+    "authors": [
+        {
+            "name": "saro0h",
+            "role": "Developer"
+        },
+        {
+            "name": "Carole Guardiola",
+            "role": "Developer"
+        }
+    ],
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "AppBundle\\": "src/AppBundle"
         },
         "classmap": [
             "app/AppKernel.php",

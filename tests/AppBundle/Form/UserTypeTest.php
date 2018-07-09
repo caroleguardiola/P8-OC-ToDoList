@@ -9,7 +9,7 @@
 namespace Tests\AppBundle\Form;
 
 use AppBundle\Entity\User;
-use AppBundle\Form\UserType;
+use AppBundle\Form\Type\UserType;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Form;

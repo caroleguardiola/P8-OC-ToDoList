@@ -120,9 +120,8 @@ class Task
     {
             if (is_null($this->user)) {
                 return new AnonymousUser();
-            }else {
-                return  $this->user;
             }
+            return  $this->user;
         }
 
     /**
