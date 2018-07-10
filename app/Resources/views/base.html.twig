@@ -39,8 +39,11 @@
         <!-- Page Content -->
         <div class="container">
             <div class="row">
-                {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
+                {% if is_granted('ROLE_ADMIN') and 'user_list' != app.request.attributes.get('_route') %}
+                <a href="{{ path('user_list') }}" class="btn btn-primary">Gestion des utilisateurs</a>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') and 'user_list' == app.request.attributes.get('_route') %}
+                    <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
                 {% endif %}
                 {% if app.user %}
                 <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
