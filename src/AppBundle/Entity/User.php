@@ -12,7 +12,7 @@ use AppBundle\Model\TaskCreatorInterface;
 
 /**
  * @ORM\Table("user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @UniqueEntity("email")
  */
 class User implements UserInterface, TaskCreatorInterface
@@ -61,41 +61,65 @@ class User implements UserInterface, TaskCreatorInterface
         $this->tasks = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return $this->username;
     }
 
+    /**
+     * @param $username
+     */
     public function setUsername($username)
     {
         $this->username = $username;
     }
 
+    /**
+     * @return null|string
+     */
     public function getSalt()
     {
         return null;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword()
     {
         return $this->password;
     }
 
+    /**
+     * @param $password
+     */
     public function setPassword($password)
     {
         $this->password = $password;
     }
 
+    /**
+     * @return mixed
+     */
     public function getEmail()
     {
         return $this->email;
     }
 
+    /**
+     * @param $email
+     */
     public function setEmail($email)
     {
         $this->email = $email;
@@ -110,6 +134,9 @@ class User implements UserInterface, TaskCreatorInterface
         return $this->role;
     }
 
+    /**
+     * @return array
+     */
     public function getRoles()
     {
         return array($this->role);
@@ -124,6 +151,9 @@ class User implements UserInterface, TaskCreatorInterface
         $this->role = $role;
     }
 
+    /**
+     *
+     */
     public function eraseCredentials()
     {
     }
@@ -165,6 +195,10 @@ class User implements UserInterface, TaskCreatorInterface
         return $this->tasks;
     }
 
+    /**
+     * @param $otherUser
+     * @return bool
+     */
     public function canBeManagedBy($otherUser)
     {
         return $this->getId() === $otherUser->getId();

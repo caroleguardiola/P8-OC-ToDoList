@@ -11,8 +11,15 @@ namespace AppBundle\Model;
 
 interface TaskCreatorInterface
 {
+    /**
+     * @return mixed
+     */
     public function getUsername();
 
+    /**
+     * @param $otherUser
+     * @return mixed
+     */
     public function canBeManagedBy($otherUser);
 
 }

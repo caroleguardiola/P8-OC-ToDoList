@@ -55,6 +55,39 @@ class UserControllerTest extends AppWebTestCase
     /**
      *
      */
+    public function testConsultListButtonUserAction()
+    {
+        $this->logInAs('admin');
+
+        $crawler = $this->client->request('GET', '/');
+
+        $link = $crawler->selectLink('Consulter la liste des utilisateurs')->link();
+        $crawler = $this->client->click($link);
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Créer un utilisateur")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testCreateButtonUserAsAdminAction()
+    {
+        $this->logInAs('admin');
+
+        $crawler = $this->client->request('GET', '/');
+
+        $link = $crawler->selectLink('Créer un nouvel utilisateur')->link();
+        $crawler = $this->client->click($link);
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Nom")')->count());
+        $this->assertSame(1, $crawler->filter('form')->count());
+    }
+
+    /**
+     *
+     */
     public function testCreatePageUserAsAnonymousAction()
     {
         $this->client->request('GET', '/users/create');

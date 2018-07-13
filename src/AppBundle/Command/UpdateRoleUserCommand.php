@@ -15,6 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateRoleUserCommand extends ContainerAwareCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         $this
@@ -23,6 +26,12 @@ class UpdateRoleUserCommand extends ContainerAwareCommand
             ->setHelp('Set ROLE_USER to user without roles')
         ;
     }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
