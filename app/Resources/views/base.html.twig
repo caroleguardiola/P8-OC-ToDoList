@@ -11,11 +11,15 @@
 
         <title>To Do List app</title>
 
+        <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
         <!-- Bootstrap Core CSS -->
         <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="{{ asset('css/shop-homepage.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -26,12 +30,72 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-light navbar-fixed-top" style="background-color: #e3f2fd;" role="navigation">
+        <nav class="navbar navbar-light navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="{{ path('homepage') }}">To Do List app</a>
-
-                    <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" />
+                    {% if 'login' != app.request.attributes.get('_route') %}
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    {% endif %}
+                    <a class="navbar-brand" href="{{ path('homepage') }}">To Do List App</a>
+                    <img src="{{ asset('img/logo_oc_new.png') }}" alt="OpenClassrooms" />
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if 'homepage' != app.request.attributes.get('_route') and 'login' != app.request.attributes.get('_route') %}
+                            <li><a href="{{ path('homepage') }}" class="btn-nav">Accueil</a></li>
+                        {% endif %}
+                        {% if 'task_list' != app.request.attributes.get('_route') and 'login' != app.request.attributes.get('_route') %}
+                            <li class="dropdown"><a href="" class="dropdown-toggle btn-nav" data-toggle="dropdown" id="dropdownTasks" aria-haspopup="true" aria-expanded="true">Gestion des tâches</a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownTasks">
+                                    <li><a href="{{ path('task_create') }}" class="btn-nav">Créer une tâche</a></li>
+                                    <li><a href="{{ path('task_list') }}" class="btn-nav">Liste des tâches</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') and 'user_list' != app.request.attributes.get('_route') and 'login' != app.request.attributes.get('_route') %}
+                            <li class="dropdown"><a href="" class="dropdown-toggle btn-nav" data-toggle="dropdown" id="dropdownTasks" aria-haspopup="true" aria-expanded="true">Gestion des utilisateurs</a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownTasks">
+                                    <li><a href="{{ path('user_create') }}" class="btn-nav">Créer un utilisateur</a></li>
+                                    <li><a href="{{ path('user_list') }}" class="btn-nav">Liste des utilisateurs</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                            {% if not app.user and 'login' != app.request.attributes.get('_route') %}
+                                <li><a href="{{ path('login') }}" class="btn-log">Connexion</a></li>
+                            {% endif %}
+                            {% if app.user and 'logout' != app.request.attributes.get('_route')%}
+                                <li><a href="{{ path('logout') }}" class="btn-log">Se déconnecter</a></li>
+                            {% endif %}
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid navbar-responsive">
+                <div class="row">
+                    {% if 'login' != app.request.attributes.get('_route') %}
+                    <div class="col-xs-4">
+                        {% if 'homepage' != app.request.attributes.get('_route') %}
+                            <a href="{{ path('homepage') }}"><i class="fa fa-home" aria-hidden="true"></i></a>
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-4">
+                        <a href="{{ path('task_list') }}#list_tricks"><i class="fa fa-bookmark" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="col-xs-4">
+                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                            <span class="connected">{{ app.user.username }}</span>
+                            <a href="{{ path('logout') }}"><i class="fa fa-sign-out-alt" aria-hidden="true"></i></a>
+                        {% else %}
+                            <a href="{{ path('login') }}"><i class="fa fa-sign-in-alt"></i></a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </nav>
@@ -39,25 +103,6 @@
         <!-- Page Content -->
         <div class="container">
             <div class="row">
-                {% if is_granted('ROLE_ADMIN') and 'user_list' != app.request.attributes.get('_route') %}
-                <a href="{{ path('user_list') }}" class="btn btn-primary">Gestion des utilisateurs</a>
-                {% endif %}
-
-                {% if is_granted('ROLE_ADMIN') and 'user_list' == app.request.attributes.get('_route') %}
-                    <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
-                {% endif %}
-
-                {% if 'homepage' != app.request.attributes.get('_route') %}
-                    <a href="{{ path('homepage') }}" class="btn btn-primary">Retour à la page d'accueil</a>
-                {% endif %}
-
-                {% if app.user %}
-                <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
-                {% endif %}
-
-                {% if not app.user and 'login' != app.request.attributes.get('_route') %}
-                <a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
-                {% endif %}
             </div>
 
             <div class="row">
@@ -75,7 +120,7 @@
                     {% endfor %}
 
                     {% block header_title %}{% endblock %}
-                    {% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_homepage.jpg') }}" alt="todo list">{% endblock %}
+                    {% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">{% endblock %}
                 </div>
             </div>
 
@@ -89,20 +134,23 @@
         </div>
         <!-- /.container -->
 
-        <div class="container">
 
-            <hr>
             <footer>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <p class="pull-right">Copyright &copy; OpenClassrooms</p>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="foot">Copyright &copy; OpenClassrooms</p>
+                        </div>
                     </div>
                 </div>
             </footer>
 
-        </div>
-
-        <script src="{{ asset('js/jquery.js') }}"></script>
+        <script
+                src="https://code.jquery.com/jquery-1.12.4.min.js"
+                integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+                crossorigin="anonymous"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+        <script src="{{ asset('js/main.js') }}"></script>
     </body>
 </html>

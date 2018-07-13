@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="text-center">Oops ! Une erreur s'est produite !</strong></h1>
+    <div class="col-md-12">
+        <h2 class="text-center">Le serveur a retourné une "{{ status_code }} {{ status_text }}".</h2>
+        <h3 class="text-center">Nous mettons tout en oeuvre pour résoudre au plus vite le problème. Merci de bien vouloir nous excuser pour la gêne occasionnée.</h3>
+        <div class="row btn-create-task">
+            <a href="{{ path('homepage') }}" class="btn">Retour à la page d'accueil</a>
+        </div>
+    </div>
+{% endblock %}

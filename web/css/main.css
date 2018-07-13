@@ -1,0 +1,344 @@
+/*!
+ * Start Bootstrap - Shop Homepage (http://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+/*general*/
+body {
+    padding-top: 150px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    background: #fcfcfc;
+    font-family: 'Raleway', sans-serif;
+}
+
+.slide-image {
+    width: 100%;
+}
+
+h1 {
+    color: #e95325;
+}
+
+label {
+    color: #545454;
+    font-size: 16px;
+}
+
+.btn-global {
+    background-color: #fff;
+    color: #e95325;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+    border-bottom-width: 3px;
+    width: 230px;
+}
+
+.btn-global:hover, .btn-global:focus {
+    background-color: #e95325 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #e95325 !important;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.5)!important;
+}
+
+.btn-add {
+    background-color: #2e7e32;
+    color: #fff;
+}
+
+.btn-add:hover, .btn-add:focus {
+    background-color: #fff;
+    color: #2e7e32;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+    border-bottom-width: 3px;
+}
+
+/*navigation*/
+.navbar-fixed-top {
+    background-color: #FFFFFF;
+    box-shadow: 0 8px 20px -8px rgba(0,0,0,.1);
+}
+
+a.navbar-brand {
+    color: #f36a10;
+}
+
+a.navbar-brand :hover {
+    color: #f36a10;
+}
+
+.navbar-responsive .fa {
+    padding-top: 15px;
+    font-size: 20px;
+    color: #f36a10;
+}
+
+.navbar-responsive {
+    text-align: center;
+    color: #f36a10;
+}
+
+.btn-nav {
+    color: #e95325;
+}
+
+.nav>li>a:hover, .nav>li>a:focus {
+    color: #545454;
+}
+
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #545454;
+    white-space: nowrap;
+}
+
+.navbar-light .navbar-toggle .icon-bar {
+    background-color: #5e5e5e;
+}
+
+.btn-log {
+    background-color: #e95325;
+    color: #FFFFFF;
+    border: 1px solid #e95325;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.5);
+}
+
+.btn-log :hover {
+    background-color: #fff;
+    color: #e95325;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+    border-bottom-width: 3px;
+}
+
+/*homepage*/
+.btn-index-1 {
+    padding: 30px 0;
+    text-align: center;
+}
+
+.btn-index-2 {
+    padding-bottom: 30px;
+    text-align: center;
+}
+
+/*login page*/
+.login {
+    padding: 30px 40px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+    background-color: #FFFFFF;
+    margin-bottom: 230px;
+}
+
+.btn-login {
+    background-color: #e95325;
+    color: #fff;
+}
+
+.logo-login {
+    padding-bottom: 50px;
+}
+
+.title-login {
+    color: #e95325;
+    font-size: 22px;
+    padding-top: 10px;
+}
+
+/*task list*/
+.caption {
+    height: 130px;
+    overflow: hidden;
+}
+
+.caption h4 {
+    white-space: nowrap;
+}
+
+.caption a {
+    color: #e95325;
+}
+
+.btn-done {
+    color: #fff;
+    background-color: #2e7e32;
+    border-color: #2e7e32;
+}
+
+.btn-done:hover, .btn-done:focus{
+    background-color: #fff;
+    color: #2e7e32;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+}
+
+.btn-not-done {
+    color: #fff;
+    background-color: #f39539;
+    border-color: #f28821;
+}
+
+.btn-not-done:hover, .btn-not-done:focus {
+    background-color: #fff;
+    color: #f39539;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+}
+
+.btn-delete {
+    color: #fff;
+    background-color: #c03c13 ;
+    border-color: #c03c13 ;
+    margin-top: 10px;
+}
+
+.btn-delete:hover, .btn-delete:focus {
+    background-color: #fff;
+    color: #c03c13 ;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+}
+
+.fa-check-circle {
+    font-size: 20px;
+}
+
+.fa-circle{
+    font-size: 20px;
+}
+
+.fa-times-circle{
+    font-size: 20px;
+}
+
+.fa-user-alt {
+    color: #f36a10;
+}
+
+.user-task {
+    color: #545454;
+}
+
+
+.fa-clock {
+    color: #f36a10;
+}
+
+/*task create*/
+.btn-create-task {
+    text-align: center;
+    margin: 20px 0 30px 0;
+}
+
+.btn-create-task a {
+    background-color: #e95325;
+    color: #FFFFFF;
+    border: 1px solid #e95325;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.5);
+}
+
+.btn-create-task a:hover, .btn-create-task a:focus {
+    background-color: #fff;
+    color: #e95325;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+    border-bottom-width: 3px;
+}
+
+/*user list*/
+.fa-user-edit {
+    font-size: 20px;
+}
+
+/*filters*/
+.filters-button-group {
+    text-align: center;
+    padding: 20px;
+}
+
+.button-filter-all {
+    background-color: #fff;
+    color: #f36a10;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+    border-radius: 4px;
+}
+
+.button-filter-done {
+    background-color: #fff;
+    color: #2e7e32;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+    border-radius: 4px;
+}
+
+.button-filter-notDone {
+    background-color: #fff;
+    color: #f39539;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    border: 1px solid #bebebe;
+    border-radius: 4px;
+}
+
+.button-filter-all:hover, .button-filter-all:focus {
+    color: #fff;
+    background-color: #f36a10;
+    border-color: #f36a10;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+}
+
+.button-filter-done:hover, .button-filter-done:focus {
+    color: #fff;
+    background-color: #2e7e32;
+    border-color: #2e7e32;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+}
+
+.button-filter-notDone:hover, .button-filter-notDone:focus {
+    color: #fff;
+    background-color: #f39539;
+    border-color: #f28821;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+}
+
+.element-item {
+    width: 100%;
+}
+
+/*footer*/
+footer {
+    padding: 25px 0;
+    background-color: #FFFFFF;
+    margin-top: 100px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.foot {
+    text-align: center;
+}
+
+/*responsive*/
+@media  (max-width: 768px) {
+    h1{
+        font-size: 28px;
+    }
+
+    .caption {
+        height: auto;
+        padding: 15px;
+    }
+}
+
+@media  (min-width: 768px) {
+    .navbar-fixed-bottom {
+        display: none;
+    }
+}
