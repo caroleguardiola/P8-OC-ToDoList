@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Carole Guardiola <carole.guardiola@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Task;
@@ -7,6 +16,7 @@ use AppBundle\Form\Type\TaskType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Exception;
 
 class TaskController extends Controller
 {
@@ -105,7 +115,7 @@ class TaskController extends Controller
             $entityManager->flush();
         }
         else {
-            throw new \Exception("Vous n'avez pas la permission de supprimer cette tâche.");
+            throw new Exception("Vous n'avez pas la permission de supprimer cette tâche.");
         }
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
