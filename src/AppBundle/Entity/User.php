@@ -212,5 +212,4 @@ class User implements UserInterface, TaskCreatorInterface
     {
         return $this->getId() === $otherUser->getId();
     }
-
 }

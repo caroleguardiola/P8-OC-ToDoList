@@ -157,11 +157,11 @@ class Task
      */
     public function getUser()
     {
-            if (is_null($this->user)) {
-                return new AnonymousUser();
-            }
-            return  $this->user;
+        if (is_null($this->user)) {
+            return new AnonymousUser();
         }
+        return  $this->user;
+    }
 
     /**
      * @param $user

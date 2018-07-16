@@ -27,7 +27,6 @@ class DefaultControllerTest extends AppWebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('html:contains("Se connecter")')->count());
-
     }
 
     /**
@@ -41,7 +40,6 @@ class DefaultControllerTest extends AppWebTestCase
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur Todo List")')->count());
-
     }
 
     /**
@@ -55,6 +53,5 @@ class DefaultControllerTest extends AppWebTestCase
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur Todo List")')->count());
-
     }
 }

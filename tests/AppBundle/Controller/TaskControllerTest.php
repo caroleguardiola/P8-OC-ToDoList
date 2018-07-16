@@ -177,7 +177,6 @@ class TaskControllerTest extends AppWebTestCase
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("La tâche a été bien été ajoutée.")')->count());
-
     }
 
     /**
@@ -196,7 +195,6 @@ class TaskControllerTest extends AppWebTestCase
         $crawler = $this->client->submit($form);
         $this->assertSame(1, $crawler->filter('html:contains("Vous devez saisir un titre.")')->count());
         $this->assertSame(1, $crawler->filter('html:contains("Vous devez saisir du contenu.")')->count());
-
     }
 
     /**
@@ -314,7 +312,6 @@ class TaskControllerTest extends AppWebTestCase
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("La tâche a bien été modifiée.")')->count());
-
     }
 
     /**

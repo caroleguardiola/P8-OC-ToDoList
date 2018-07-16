@@ -29,5 +29,4 @@ interface TaskCreatorInterface
      * @return mixed
      */
     public function canBeManagedBy($otherUser);
-
 }

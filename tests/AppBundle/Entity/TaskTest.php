@@ -21,7 +21,6 @@ use PHPUnit\Framework\TestCase;
 use AppBundle\Entity\Task;
 use AppBundle\Entity\User;
 
-
 class TaskTest extends TestCase
 {
     /**

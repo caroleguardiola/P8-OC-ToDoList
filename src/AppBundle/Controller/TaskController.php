@@ -109,12 +109,11 @@ class TaskController extends Controller
     {
         $user = $this->getUser();
 
-        if ($task->canBeDeletedBy($user)){
+        if ($task->canBeDeletedBy($user)) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($task);
             $entityManager->flush();
-        }
-        else {
+        } else {
             throw new Exception("Vous n'avez pas la permission de supprimer cette tâche.");
         }
 

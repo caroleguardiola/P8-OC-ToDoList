@@ -27,7 +27,6 @@ use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
-
 class AppWebTestCase extends WebTestCase
 {
     /**
@@ -111,8 +110,8 @@ class AppWebTestCase extends WebTestCase
     protected function createUser($role)
     {
         $user = new User;
-        $user->setUsername('user'.random_int(1,10000));
-        $user->setEmail('email'.random_int(1,10000).'@example.com');
+        $user->setUsername('user'.random_int(1, 10000));
+        $user->setEmail('email'.random_int(1, 10000).'@example.com');
         $user->setRole($role);
 
         $passwordEncoder = $this->getSecurityPasswordEncoder();
@@ -133,8 +132,8 @@ class AppWebTestCase extends WebTestCase
     protected function createUserForLogin($role, $password)
     {
         $user = new User;
-        $user->setUsername('user'.random_int(1,10000));
-        $user->setEmail('email'.random_int(1,10000).'@example.com');
+        $user->setUsername('user'.random_int(1, 10000));
+        $user->setEmail('email'.random_int(1, 10000).'@example.com');
         $user->setRole($role);
 
         $passwordEncoder = $this->getSecurityPasswordEncoder();
@@ -154,7 +153,7 @@ class AppWebTestCase extends WebTestCase
     protected function createTask($user)
     {
         $task = new Task;
-        $task->setTitle('Tâche'.random_int(1,10000));
+        $task->setTitle('Tâche'.random_int(1, 10000));
         $task->setContent('Contenu de la tâche de test.');
         $task->setUser($user);
 

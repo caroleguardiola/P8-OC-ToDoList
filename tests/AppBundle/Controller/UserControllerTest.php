@@ -154,7 +154,6 @@ class UserControllerTest extends AppWebTestCase
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("L\'utilisateur a bien été ajouté.")')->count());
-
     }
 
     /**
@@ -178,7 +177,6 @@ class UserControllerTest extends AppWebTestCase
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("L\'utilisateur a bien été ajouté.")')->count());
-
     }
 
     /**
@@ -200,7 +198,6 @@ class UserControllerTest extends AppWebTestCase
         $this->assertSame(1, $crawler->filter('html:contains(" Vous devez saisir un nom d\'utilisateur")')->count());
         $this->assertSame(1, $crawler->filter('html:contains(" Vous devez saisir une adresse email")')->count());
         $this->assertSame(1, $crawler->filter('html:contains(" Vous devez choisir un rôle")')->count());
-
     }
 
     /**
@@ -271,6 +268,5 @@ class UserControllerTest extends AppWebTestCase
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("L\'utilisateur a bien été modifié.")')->count());
-
     }
 }
