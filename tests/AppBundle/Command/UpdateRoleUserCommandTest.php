@@ -6,6 +6,15 @@
  * Time: 18:02
  */
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Carole Guardiola <carole.guardiola@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tests\AppBundle\Command;
 
 use Tests\AppBundle\AppWebTestCase;
@@ -15,7 +24,6 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Repository\UserRepository;
-
 
 class UpdateRoleUserCommandTest extends AppWebTestCase
 {
@@ -48,9 +56,9 @@ class UpdateRoleUserCommandTest extends AppWebTestCase
         $user = new User;
         $reflectionProperty = $reflectionClass->getProperty('id');
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($user, random_int(1,10000));
-        $user->setUsername('user'.random_int(1,10000));
-        $user->setEmail('email'.random_int(1,10000).'@example.com');
+        $reflectionProperty->setValue($user, random_int(1, 10000));
+        $user->setUsername('user'.random_int(1, 10000));
+        $user->setEmail('email'.random_int(1, 10000).'@example.com');
         $user->setRole($role);
         $user->setPassword('password');
 
@@ -93,6 +101,5 @@ class UpdateRoleUserCommandTest extends AppWebTestCase
         $this->assertSame(['ROLE_USER'], $userWithoutRole->getRoles());
         $this->assertSame(['ROLE_USER'], $userWithUserRole->getRoles());
         $this->assertSame(['ROLE_ADMIN'], $userWithAdminRole->getRoles());
-
     }
 }

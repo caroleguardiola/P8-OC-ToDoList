@@ -1,17 +1,27 @@
 {% extends 'base.html.twig' %}
 
+{% block header_img %}{% endblock %}
+
 {% block body %}
-    {% if error %}
-        <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <div class="col-md-12">
+        <div class="col-md-offset-4 col-md-4 login">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <div class="text-center logo-login">
+                <img src="{{ asset('img/logo_oc_new.png') }}" alt="OpenClassrooms" />
+                <p class="title-login text-center">ToDo List App</p>
+            </div>
 
-    <form action="{{ path('login_check') }}" method="post">
-        <label for="username">Nom d'utilisateur :</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}" />
-
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="_password" />
-
-        <button class="btn btn-success" type="submit">Se connecter</button>
-    </form>
+            <form action="{{ path('login_check') }}" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="username" name="_username" placeholder="Nom d'utilisateur" value="{{ last_username }}" />
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="password" placeholder="Mot de passe" name="_password" />
+                </div>
+                <button class="form-control btn-login" type="submit">Se connecter</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}

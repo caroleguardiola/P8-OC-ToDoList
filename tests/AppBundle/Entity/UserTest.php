@@ -6,12 +6,20 @@
  * Time: 10:53
  */
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Carole Guardiola <carole.guardiola@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tests\AppBundle\Entity;
 
 use PHPUnit\Framework\TestCase;
 use AppBundle\Entity\Task;
 use AppBundle\Entity\User;
-
 
 class UserTest extends TestCase
 {

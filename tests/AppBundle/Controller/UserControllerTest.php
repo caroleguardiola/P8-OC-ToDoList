@@ -6,6 +6,15 @@
  * Time: 18:02
  */
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Carole Guardiola <carole.guardiola@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tests\AppBundle\Controller;
 
 use Tests\AppBundle\AppWebTestCase;
@@ -50,6 +59,39 @@ class UserControllerTest extends AppWebTestCase
         $this->client->request('GET', '/users');
 
         $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+    }
+
+    /**
+     *
+     */
+    public function testConsultListButtonUserAction()
+    {
+        $this->logInAs('admin');
+
+        $crawler = $this->client->request('GET', '/');
+
+        $link = $crawler->selectLink('Consulter la liste des utilisateurs')->link();
+        $crawler = $this->client->click($link);
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Créer un utilisateur")')->count());
+    }
+
+    /**
+     *
+     */
+    public function testCreateButtonUserAsAdminAction()
+    {
+        $this->logInAs('admin');
+
+        $crawler = $this->client->request('GET', '/');
+
+        $link = $crawler->selectLink('Créer un nouvel utilisateur')->link();
+        $crawler = $this->client->click($link);
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Nom")')->count());
+        $this->assertSame(1, $crawler->filter('form')->count());
     }
 
     /**
@@ -112,7 +154,6 @@ class UserControllerTest extends AppWebTestCase
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("L\'utilisateur a bien été ajouté.")')->count());
-
     }
 
     /**
@@ -136,7 +177,6 @@ class UserControllerTest extends AppWebTestCase
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("L\'utilisateur a bien été ajouté.")')->count());
-
     }
 
     /**
@@ -158,7 +198,6 @@ class UserControllerTest extends AppWebTestCase
         $this->assertSame(1, $crawler->filter('html:contains(" Vous devez saisir un nom d\'utilisateur")')->count());
         $this->assertSame(1, $crawler->filter('html:contains(" Vous devez saisir une adresse email")')->count());
         $this->assertSame(1, $crawler->filter('html:contains(" Vous devez choisir un rôle")')->count());
-
     }
 
     /**
@@ -229,6 +268,5 @@ class UserControllerTest extends AppWebTestCase
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("L\'utilisateur a bien été modifié.")')->count());
-
     }
 }

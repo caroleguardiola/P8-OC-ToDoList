@@ -6,6 +6,15 @@
  * Time: 16:15
  */
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Carole Guardiola <carole.guardiola@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tests\AppBundle\Controller;
 
 use Tests\AppBundle\AppWebTestCase;
@@ -66,7 +75,7 @@ class TaskControllerTest extends AppWebTestCase
         $crawler = $this->client->click($link);
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(1, $crawler->filter('html:contains("Title")')->count());
+        $this->assertEquals(1, $crawler->filter('html:contains("Titre")')->count());
         $this->assertSame(1, $crawler->filter('form')->count());
     }
 
@@ -83,7 +92,7 @@ class TaskControllerTest extends AppWebTestCase
         $crawler = $this->client->click($link);
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(1, $crawler->filter('html:contains("Title")')->count());
+        $this->assertEquals(1, $crawler->filter('html:contains("Titre")')->count());
         $this->assertSame(1, $crawler->filter('form')->count());
     }
 
@@ -111,7 +120,7 @@ class TaskControllerTest extends AppWebTestCase
         $crawler = $this->client->request('GET', '/tasks/create');
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->filter('html:contains("Title")')->count());
+        $this->assertSame(1, $crawler->filter('html:contains("Titre")')->count());
     }
 
     /**
@@ -124,7 +133,7 @@ class TaskControllerTest extends AppWebTestCase
         $crawler = $this->client->request('GET', '/tasks/create');
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->filter('html:contains("Title")')->count());
+        $this->assertSame(1, $crawler->filter('html:contains("Titre")')->count());
     }
 
     /**
@@ -168,7 +177,6 @@ class TaskControllerTest extends AppWebTestCase
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("La tâche a été bien été ajoutée.")')->count());
-
     }
 
     /**
@@ -187,7 +195,6 @@ class TaskControllerTest extends AppWebTestCase
         $crawler = $this->client->submit($form);
         $this->assertSame(1, $crawler->filter('html:contains("Vous devez saisir un titre.")')->count());
         $this->assertSame(1, $crawler->filter('html:contains("Vous devez saisir du contenu.")')->count());
-
     }
 
     /**
@@ -235,7 +242,7 @@ class TaskControllerTest extends AppWebTestCase
 
         $crawler = $this->client->request('GET', '/');
 
-        $link = $crawler->selectLink('Consulter la liste des tâches à faire')->link();
+        $link = $crawler->selectLink('Consulter la liste des tâches')->link();
         $crawler = $this->client->click($link);
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -269,7 +276,7 @@ class TaskControllerTest extends AppWebTestCase
         $crawler = $this->client->request('GET', 'tasks/'. $task->getId() .'/edit');
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->filter('html:contains("Title")')->count());
+        $this->assertSame(1, $crawler->filter('html:contains("Titre")')->count());
     }
 
     /**
@@ -283,7 +290,7 @@ class TaskControllerTest extends AppWebTestCase
         $crawler = $this->client->request('GET', 'tasks/'. $task->getId() .'/edit');
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertSame(1, $crawler->filter('html:contains("Title")')->count());
+        $this->assertSame(1, $crawler->filter('html:contains("Titre")')->count());
     }
 
     /**
@@ -305,7 +312,6 @@ class TaskControllerTest extends AppWebTestCase
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
         $this->assertGreaterThan(0, $crawler->filter('div:contains("La tâche a bien été modifiée.")')->count());
-
     }
 
     /**
