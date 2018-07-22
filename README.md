@@ -126,6 +126,8 @@ For this project we use those free code reviewers that automates code reviews an
 * [Scrutinizer](https://scrutinizer-ci.com/)
 * [Code Climate](https://codeclimate.com/)
 
+We've used too for one analysis [SensioLabsInsight](https://insight.sensiolabs.com/) that is specialized for Symfony.
+
 #### Testing
 
 For this project, we use **PHPUnit** for unit tests and functionals tests.

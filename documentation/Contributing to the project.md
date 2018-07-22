@@ -74,7 +74,7 @@ The purpose of this step is to allow you work simultaneously on the official P8-
 
 ## Step 2 - Work on the project
 
-1. 	Install the project by referring to README.md, part [Installation](https://github.com/caroleguardiola/P8-OC-ToDoList/blob/master/README.md#Installation) step 2.
+1. 	Install the project by referring to README.md, part [Installation](https://github.com/caroleguardiola/P8-OC-ToDoList/blob/master/README.md#L62) step 2.
 
 2. 	Change to the repository directory on your computer (if you are not already there):
 	```
