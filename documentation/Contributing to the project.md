@@ -128,7 +128,7 @@ The purpose of this step is to allow you work simultaneously on the official P8-
 #### 1. 	Create a Pull Request
 
 Everything is now ready to initiate a **pull request**. 
-Go to your forked repository at https://github.com/YOUR-GITHUB-USERNAME/P8-OC-ToDoList and you'll see that your new branch is listed at the top with a handy “Compare & pull request” button. Then click on that button.
+Go to your forked repository at `https://github.com/YOUR-GITHUB-USERNAME/P8-OC-ToDoList` and you'll see that your new branch is listed at the top with a handy “Compare & pull request” button. Then click on that button.
 
 On this page, ensure that the **base fork** points to the correct repository and branch. 
 In this example, the **base fork** should be `caroleguardiola/P8-OC-ToDoList` and the **base branch** should be the `features`, which is the branch that you selected to base your changes on. 
