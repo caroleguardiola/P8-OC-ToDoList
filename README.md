@@ -140,7 +140,7 @@ To check the performance impact of this project, we use [Blackfire](https://blac
 
 ## Contributing
 
-To contribute to this project, read [ToDoList - How to contribute](Contribute.md)
+To contribute to this project, read [ToDoList - How to contribute](https://github.com/caroleguardiola/P8-OC-ToDoList/blob/master/documentation/Contributing%20to%20the%20project.md)
 
 
 ## Documentation
